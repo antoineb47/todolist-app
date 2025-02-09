@@ -21,15 +21,9 @@ A feature-rich todo list application with user authentication, built using HTML,
 git clone https://github.com/antoineb47/todolist-app.git
 ```
 
-2. Set up a local PHP server:
-```bash
-php -S localhost:8000
-```
+2. Open index.html in your web browser
 
-3. Open the application in your browser:
-```
-http://localhost:8000
-```
+That's it! No server setup required.
 
 ## Usage
 
@@ -44,18 +38,18 @@ http://localhost:8000
 ## Technical Details
 
 - Frontend: HTML5, CSS3, JavaScript (ES6+)
-- Backend: PHP (for data persistence)
-- Data Storage: JSON file
-- Authentication: Local JSON-based user management
+- Data Storage: Browser's localStorage
+- Authentication: Local storage-based user management
 
 ## Security Note
 
-This is a demo application using basic JSON file storage. For production use, consider:
-- Using a proper database
+This is a demo application using browser localStorage. For production use, consider:
+- Using a proper backend server
 - Implementing secure password hashing
 - Adding input validation
 - Using HTTPS
 - Implementing proper session management
+- Using a secure database instead of localStorage
 
 ## License
 

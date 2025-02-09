@@ -2,28 +2,21 @@
 let currentUser = null;
 let users = [];
 
-// Load users from JSON file
-async function loadUsers() {
+// Load users from localStorage
+function loadUsers() {
     try {
-        const response = await fetch('users.json');
-        users = await response.json();
+        const storedUsers = localStorage.getItem('users');
+        users = storedUsers ? JSON.parse(storedUsers) : [];
     } catch (error) {
         console.error('Error loading users:', error);
         users = [];
     }
 }
 
-// Save users to JSON file
-async function saveUsers() {
+// Save users to localStorage
+function saveUsers() {
     try {
-        const response = await fetch('save-users.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(users),
-        });
-        if (!response.ok) throw new Error('Failed to save users');
+        localStorage.setItem('users', JSON.stringify(users));
     } catch (error) {
         console.error('Error saving users:', error);
     }
