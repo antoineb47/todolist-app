@@ -199,6 +199,55 @@ function showMessage(text, type) {
     }, 3000);
 }
 
+// Penguin explosion animation
+function explodePenguin(event) {
+    const penguin = event.target;
+    const rect = penguin.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Create explosion particles
+    for (let i = 0; i < 20; i++) {
+        createParticle(centerX, centerY);
+    }
+
+    // Add explosion animation class
+    penguin.classList.add('exploding');
+
+    // Remove penguin after animation
+    setTimeout(() => {
+        penguin.remove();
+    }, 500);
+}
+
+function createParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    document.body.appendChild(particle);
+
+    // Random position around the penguin
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+
+    // Random direction and distance
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 100 + Math.random() * 100;
+    const tx = Math.cos(angle) * distance;
+    const ty = Math.sin(angle) * distance;
+
+    // Set custom properties for the animation
+    particle.style.setProperty('--tx', `${tx}px`);
+    particle.style.setProperty('--ty', `${ty}px`);
+
+    // Add animation
+    particle.style.animation = 'particle 0.5s ease-out forwards';
+
+    // Remove particle after animation
+    setTimeout(() => {
+        particle.remove();
+    }, 500);
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
