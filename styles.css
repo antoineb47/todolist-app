@@ -125,32 +125,66 @@ button:active {
     transform-origin: center;
 }
 
+#penguin::before,
+#penguin::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: #282828;
+    bottom: -15px;
+    border-radius: 10px;
+}
+
+#penguin::before {
+    left: 25px;
+    animation: leftLeg 0.5s infinite;
+    transform-origin: top;
+}
+
+#penguin::after {
+    right: 25px;
+    animation: rightLeg 0.5s infinite;
+    animation-delay: 0.25s;
+    transform-origin: top;
+}
+
+@keyframes leftLeg {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+}
+
+@keyframes rightLeg {
+    0%, 100% { transform: rotate(15deg); }
+    50% { transform: rotate(-15deg); }
+}
+
 @keyframes walkAcross {
     0% {
         left: -100px;
-        transform: scaleX(1) rotate(-5deg);
+        transform: scaleX(1);
     }
     45% {
-        transform: scaleX(1) rotate(5deg);
+        transform: scaleX(1) translateY(-5px);
     }
     49.9% {
         left: 100%;
-        transform: scaleX(1) rotate(-5deg);
+        transform: scaleX(1) translateY(0);
     }
     50% {
         left: 100%;
-        transform: scaleX(-1) rotate(-5deg);
+        transform: scaleX(-1) translateY(0);
     }
     95% {
-        transform: scaleX(-1) rotate(5deg);
+        transform: scaleX(-1) translateY(-5px);
     }
     99.9% {
         left: -100px;
-        transform: scaleX(-1) rotate(-5deg);
+        transform: scaleX(-1) translateY(0);
     }
     100% {
         left: -100px;
-        transform: scaleX(1) rotate(-5deg);
+        transform: scaleX(1) translateY(0);
     }
 }
 
@@ -178,20 +212,65 @@ button:active {
 
 .particle {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #000;
-    border-radius: 50%;
     pointer-events: none;
+}
+
+.particle-fire {
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(circle, #ff4d00, #ff0000);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+
+.particle-smoke {
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(100, 100, 100, 0.8), rgba(50, 50, 50, 0));
+    border-radius: 50%;
+    filter: blur(5px);
+}
+
+.particle-spark {
+    width: 4px;
+    height: 4px;
+    background: #ffff00;
+    border-radius: 50%;
+    filter: blur(1px);
 }
 
 @keyframes particle {
     0% {
-        transform: translate(0, 0);
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(var(--scale));
+        opacity: 0;
+    }
+}
+
+@keyframes smoke {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(3);
+        opacity: 0;
+    }
+}
+
+@keyframes spark {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        transform: translate(var(--tx), var(--ty));
+        transform: translate(var(--tx), var(--ty)) rotate(180deg);
         opacity: 0;
     }
 }
@@ -329,4 +408,19 @@ button:active {
     color: var(--primary-color);
     text-align: center;
     margin: 10px 0;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
 }

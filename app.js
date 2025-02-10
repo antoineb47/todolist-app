@@ -206,46 +206,97 @@ function explodePenguin(event) {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    // Create explosion particles
+    // Create fire particles
+    for (let i = 0; i < 15; i++) {
+        createParticle(centerX, centerY, 'fire');
+    }
+
+    // Create smoke particles
+    for (let i = 0; i < 10; i++) {
+        createParticle(centerX, centerY, 'smoke');
+    }
+
+    // Create spark particles
     for (let i = 0; i < 20; i++) {
-        createParticle(centerX, centerY);
+        createParticle(centerX, centerY, 'spark');
     }
 
     // Add explosion animation class
     penguin.classList.add('exploding');
 
-    // Remove penguin after animation
+    // Create initial explosion flash
+    const flash = document.createElement('div');
+    flash.style.position = 'fixed';
+    flash.style.left = (centerX - 50) + 'px';
+    flash.style.top = (centerY - 50) + 'px';
+    flash.style.width = '100px';
+    flash.style.height = '100px';
+    flash.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,0,0.8) 50%, rgba(255,0,0,0) 100%)';
+    flash.style.borderRadius = '50%';
+    flash.style.filter = 'blur(5px)';
+    flash.style.animation = 'explode 0.5s ease-out forwards';
+    document.body.appendChild(flash);
+
+    // Remove penguin and flash after animation
     setTimeout(() => {
         penguin.remove();
+        flash.remove();
+    }, 500);
+
+    // Add screen shake effect
+    document.body.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both';
+    setTimeout(() => {
+        document.body.style.animation = '';
     }, 500);
 }
 
-function createParticle(x, y) {
+function createParticle(x, y, type) {
     const particle = document.createElement('div');
-    particle.className = 'particle';
+    particle.className = `particle particle-${type}`;
     document.body.appendChild(particle);
 
     // Random position around the penguin
     particle.style.left = x + 'px';
     particle.style.top = y + 'px';
 
-    // Random direction and distance
+    // Random direction and distance based on particle type
     const angle = Math.random() * Math.PI * 2;
-    const distance = 100 + Math.random() * 100;
+    let distance, duration, scale;
+
+    switch(type) {
+        case 'fire':
+            distance = 50 + Math.random() * 50;
+            duration = 0.5 + Math.random() * 0.3;
+            scale = 0.5 + Math.random() * 1;
+            break;
+        case 'smoke':
+            distance = 30 + Math.random() * 40;
+            duration = 1 + Math.random() * 0.5;
+            scale = 2 + Math.random() * 2;
+            break;
+        case 'spark':
+            distance = 80 + Math.random() * 100;
+            duration = 0.3 + Math.random() * 0.3;
+            scale = 0.3 + Math.random() * 0.5;
+            break;
+    }
+
     const tx = Math.cos(angle) * distance;
-    const ty = Math.sin(angle) * distance;
+    const ty = Math.sin(angle) * distance - (type === 'smoke' ? 50 : 0); // Smoke rises up
 
     // Set custom properties for the animation
     particle.style.setProperty('--tx', `${tx}px`);
     particle.style.setProperty('--ty', `${ty}px`);
+    particle.style.setProperty('--scale', scale);
 
     // Add animation
-    particle.style.animation = 'particle 0.5s ease-out forwards';
+    const animationName = type === 'smoke' ? 'smoke' : type === 'spark' ? 'spark' : 'particle';
+    particle.style.animation = `${animationName} ${duration}s ease-out forwards`;
 
     // Remove particle after animation
     setTimeout(() => {
         particle.remove();
-    }, 500);
+    }, duration * 1000);
 }
 
 // Event Listeners
